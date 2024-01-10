@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import routes from "../routes/index";
+import db from "../db/DBconnection";
 
 class Server {
     private app: Application;
@@ -9,6 +10,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || "3001";
         this.listen();
+        this.dbConnect();
         this.middlewares();
         this.routes();
     };
@@ -31,7 +33,16 @@ class Server {
 
     middlewares() {
         this.app.use(express.json());
-    }
+    };
+
+    async dbConnect() {
+        try {
+            await db.authenticate();
+            console.log("DB Connected!");
+        } catch(error) {
+            console.log(error);
+        };
+    };
 }
 
 export default Server;
