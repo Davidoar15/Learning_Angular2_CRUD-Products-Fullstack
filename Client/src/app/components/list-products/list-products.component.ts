@@ -1,29 +1,29 @@
 import { Component } from '@angular/core';
 import { Product } from '../../interfaces/product';
 import { RouterLink } from '@angular/router';
+import { ProductService } from '../../services/product.service';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink, HttpClientModule],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })
 export class ListProductsComponent {
-  listProducts: Product[] = [
-    {
-      id: 1,
-      name: "Coca-Cola",
-      description: "Refresco",
-      price: 50,
-      stock: 100
-    },
-    {
-      id: 2,
-      name: "Quilmes",
-      description: "Cerveza",
-      price: 20,
-      stock: 200
-    }
-  ]
+  listProducts: Product[] = []
+
+  constructor(private _productService: ProductService) { }
+
+  ngOnInit(): void {
+    this.getListProducts();
+  };
+  
+  getListProducts() {
+    this._productService.getListProducts().subscribe((data) => {
+      this.listProducts = data;
+    });
+  };
 }

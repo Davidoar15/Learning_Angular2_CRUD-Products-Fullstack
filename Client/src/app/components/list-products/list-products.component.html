@@ -19,7 +19,7 @@
       <tr class="table-active">
         <td>{{ product.name }}</td>
         <td>{{ product.description }}</td>
-        <td>{{ product.price }}</td>
+        <td>{{ product.price | currency }}</td>
         <td>{{ product.stock }}</td>
         <td>
             <button [routerLink]="['/edit', product.id]" type="button" class="btn btn-info btn-sm">Edit</button>
