@@ -1,22 +1,45 @@
-<div class="row mt-5">
+<div class="row mt-4">
   <div class="headerContainer">
     <div class="card text-white bg-secondary mb-3 border-5 border-success" style="max-width: 25rem">
       <div class="card-header text-center">
         <h2>Add Product</h2>
       </div>
-      <div class="card-body p-5">
-        <form>
-            <input type="text" class="form-control px-5" placeholder="Enter name">
-            <input type="text" class="form-control px-5 mt-3" placeholder="Enter description">
-            <input type="text" class="form-control px-5 mt-3" placeholder="Enter price">
-            <input type="text" class="form-control px-5 mt-3" placeholder="Enter stock">
+      <div class="card-body p-5 pb-3">
+        <form [formGroup]="form" (ngSubmit)="addProduct()">
+            <input formControlName="name" type="text" maxlength="25" class="form-control px-5" placeholder="Enter name">
+            @if (form.get('name')?.hasError('required') && form.get('name')?.touched){
+              <span>
+                Name is <strong>Required</strong>
+              </span>
+            }
+
+            <input formControlName="description" type="text" maxlength="30" class="form-control px-5 mt-3" placeholder="Enter description">
+            @if (form.get('description')?.hasError('required') && form.get('description')?.touched){
+              <span>
+                Description is <strong>Required</strong>
+              </span>
+            }
+
+            <input formControlName="price" type="number" class="form-control px-5 mt-3" placeholder="Enter price">
+            @if (form.get('price')?.hasError('required') && form.get('price')?.touched){
+              <span>
+                Price is <strong>Required</strong>
+              </span>
+            }
+
+            <input formControlName="stock" type="number" class="form-control px-5 mt-3" placeholder="Enter stock">
+            @if (form.get('stock')?.hasError('required') && form.get('stock')?.touched){
+              <span>
+                Stock is <strong>Required</strong>
+              </span>
+            } 
 
             <div class="btnContainer">
                 <div>
                     <button type="button" class="btn btn-secondary" routerLink="/">Return</button>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="submit" [disabled]="form.invalid" class="btn btn-success">Accept</button>
                 </div>
             </div>
         </form>
