@@ -1,32 +1,37 @@
-<div class="container mt-4">
-  <div class="title">
-    <h4>Products List</h4>
-    <button type="button" class="btn btn-secondary" routerLink="/add">New +</button>
-  </div>
+@if (loading) {
+  <app-progress-bar></app-progress-bar>
+} @else {
+  <div class="container mt-4">
+    <div class="title">
+      <h4>Products List</h4>
+      <button type="button" class="btn btn-secondary" routerLink="/add">New +</button>
+    </div>
 
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Price</th>
-        <th scope="col">Stock</th>
-        <th scope="col"></th><!--Actions-->
-      </tr>
-    </thead>
-    <tbody>
-      @for (product of listProducts; track product.id) {
-      <tr class="table-active">
-        <td>{{ product.name }}</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.price | currency }}</td>
-        <td>{{ product.stock }}</td>
-        <td>
-            <button [routerLink]="['/edit', product.id]" type="button" class="btn btn-info btn-sm">Edit</button>
-            <button type="button" class="btn btn-danger btn-sm me-2">X</button>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
-</div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Description</th>
+          <th scope="col">Price</th>
+          <th scope="col">Stock</th>
+          <th scope="col"></th><!--Actions-->
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of listProducts; track product.id) {
+        <tr class="table-active">
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>{{ product.stock }}</td>
+          <td>
+              <button [routerLink]="['/edit', product.id]" type="button" class="btn btn-info btn-sm">Edit</button>
+              <button (click)="deleteProduct(product.id!)" type="button" class="btn btn-danger btn-sm me-2">X</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+

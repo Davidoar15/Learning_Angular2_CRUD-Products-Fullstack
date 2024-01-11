@@ -4,16 +4,18 @@ import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ProgressBarComponent } from '../../shared/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [CommonModule, RouterLink, HttpClientModule],
+  imports: [CommonModule, RouterLink, HttpClientModule, ProgressBarComponent],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })
 export class ListProductsComponent {
   listProducts: Product[] = []
+  loading: boolean = false
 
   constructor(private _productService: ProductService) { }
 
@@ -22,8 +24,19 @@ export class ListProductsComponent {
   };
   
   getListProducts() {
-    this._productService.getListProducts().subscribe((data) => {
-      this.listProducts = data;
+    this.loading = true;
+
+    setTimeout(() => {
+      this._productService.getListProducts().subscribe((data: Product[]) => {
+        this.listProducts = data;
+        this.loading = false;
+      });
+    }, 750);
+  };
+
+  deleteProduct(id: number) {
+    this._productService.deleteProduct(id).subscribe(() => {
+      this.getListProducts();
     });
   };
 }
