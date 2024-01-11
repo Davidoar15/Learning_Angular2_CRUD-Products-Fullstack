@@ -5,7 +5,11 @@
     <div class="headerContainer">
       <div class="card text-white bg-secondary mb-3 border-5 border-success" style="max-width: 25rem">
         <div class="card-header text-center">
-          <h2>Register Product</h2>
+          @if (id !== null) {
+            <h2>Edit Product</h2>
+          } @else {
+            <h2>Register Product</h2>
+          }
         </div>
         <div class="card-body p-5 pb-3">
           <form [formGroup]="form" (ngSubmit)="addProduct()">

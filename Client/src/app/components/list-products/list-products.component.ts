@@ -38,7 +38,7 @@ export class ListProductsComponent {
     }, 750);
   };
 
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     this._productService.deleteProduct(id).subscribe(() => {
       this.getListProducts();
       this.toastr.warning("Product was eliminated successfully", "Product Eliminated!");

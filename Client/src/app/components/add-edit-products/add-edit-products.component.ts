@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
@@ -17,12 +17,14 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 export class AddEditProductsComponent {
   form: FormGroup;
   loading: boolean = false;
+  id: string | null;
 
   constructor(
     private fb: FormBuilder,
     private _productService: ProductService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private aRouter: ActivatedRoute
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -30,7 +32,13 @@ export class AddEditProductsComponent {
       price: [null, Validators.required],
       stock: [null, Validators.required]
     })
+
+    this.id = aRouter.snapshot.paramMap.get('id');
   };
+
+  ngOnInit(): void {
+    if (this.id !== null) this.getProduct(this.id);
+  }
 
   addProduct() {
     const product: Product = {
@@ -41,10 +49,31 @@ export class AddEditProductsComponent {
     };
 
     this.loading = true;
-    this._productService.addProduct(product).subscribe(() => {
+    if (this.id !== null) {
+      product.id = this.id;
+      this._productService.updateProduct(this.id, product).subscribe(() => {
+        this.toastr.info(`Product ${product.name} was updated successfully`, "Product Updated!")
+      });
+    } else {
+      this._productService.addProduct(product).subscribe(() => {
+        this.toastr.success(`Product ${product.name} was registered successfully`, "Product Registered!")
+      });
+    }
+    this.loading = false;
+    this.router.navigate(['/']);
+
+  };
+
+  getProduct(id: string) {
+    this.loading = true;
+    this._productService.getProduct(id).subscribe((data: Product) => {
       this.loading = false;
-      this.router.navigate(['/']);
-      this.toastr.success(`Product ${product.name} was registered successfully`, "Product Registered!")
-    });
+      this.form.setValue({
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        stock: data.stock
+      });
+    })
   };
 }
